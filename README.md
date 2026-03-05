@@ -15,7 +15,7 @@ A web app to calculate and track your household energy costs across different ap
 
 ## 🚀 Demo
 
-[Live Demo](https://myelectricbill.vercel.app) *(Add your deployed URL here)*
+[Live Demo](https://myelectricbill.vercel.app)
 
 ## 📸 Screenshots
 
