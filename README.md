@@ -15,7 +15,7 @@ A web app to calculate and track your household energy costs across different ap
 
 ## 🚀 Demo
 
-[Live Demo](https://your-demo-url.vercel.app) *(Add your deployed URL here)*
+[Live Demo](https://myelectricbill.vercel.app) *(Add your deployed URL here)*
 
 ## 📸 Screenshots
 
@@ -101,7 +101,7 @@ MIT License - Feel free to use, modify, and distribute!
 
 Questions? Suggestions? Reach out!
 
-- GitHub Issues: [Open an issue](https://github.com/yourusername/energy-calculator/issues)
+- GitHub Issues: [Open an issue](https://github.com/horlladjosh/my-electric-bill/issues)
 - Email: contact@horlladjosh.com
 - Twitter: @horllad_josh
 
