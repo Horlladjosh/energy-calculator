@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Cost Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+            background: #0a0a0a;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        h1 {
+            color: #fff;
+            margin-bottom: 8px;
+            font-size: 2em;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+        }
+
+        .subtitle {
+            color: #888;
+            margin-bottom: 40px;
+            font-size: 0.95em;
+            font-weight: 400;
+        }
+
+        .rate-input {
+            background: #151515;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #222;
+        }
+
+        .rate-input label {
+            display: block;
+            margin-bottom: 10px;
+            color: #ccc;
+            font-weight: 500;
+            font-size: 0.9em;
+        }
+
+        .rate-input input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 1em;
+            background: #0a0a0a;
+            color: #fff;
+            transition: border 0.2s;
+        }
+
+        .rate-input input:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        .rate-input small {
+            color: #666;
+            display: block;
+            margin-top: 8px;
+            font-size: 0.85em;
+        }
+
+        .appliance-form {
+            background: #151515;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #222;
+        }
+
+        .appliance-form h2 {
+            margin-bottom: 20px;
+            color: #fff;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ccc;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 0.95em;
+            background: #0a0a0a;
+            color: #fff;
+            transition: border 0.2s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        .rate-input select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            font-size: 0.95em;
+            background: #0a0a0a;
+            color: #fff;
+            transition: border 0.2s;
+            cursor: pointer;
+        }
+
+        .rate-input select:focus {
+            outline: none;
+            border-color: #666;
+        }
+
+        /* Style the select dropdown arrow */
+        select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 16px;
+            padding-right: 40px;
+        }
+
+        .slider-container {
+            margin-top: 10px;
+        }
+
+        .slider-value {
+            color: #fff;
+            font-weight: 500;
+            font-size: 1em;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #333;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #e0e0e0;
+        }
+
+        .appliances-list {
+            margin-top: 30px;
+        }
+
+        .appliance-item {
+            background: #151515;
+            border: 1px solid #222;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: border 0.2s;
+        }
+
+        .appliance-item:hover {
+            border-color: #333;
+        }
+
+        .appliance-info h3 {
+            color: #fff;
+            margin-bottom: 6px;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .appliance-details {
+            color: #888;
+            font-size: 0.85em;
+        }
+
+        .appliance-cost {
+            text-align: right;
+        }
+
+        .cost-value {
+            color: #fff;
+            font-size: 1.5em;
+            font-weight: 600;
+        }
+
+        .cost-period {
+            color: #666;
+            font-size: 0.8em;
+        }
+
+        .btn-remove {
+            background: transparent;
+            color: #888;
+            padding: 6px 12px;
+            border: 1px solid #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.85em;
+            margin-left: 15px;
+            transition: all 0.2s;
+        }
+
+        .btn-remove:hover {
+            background: #1a1a1a;
+            color: #fff;
+            border-color: #444;
+        }
+
+        .total-section {
+            background: #151515;
+            border: 1px solid #222;
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 30px;
+        }
+
+        .total-section h2 {
+            margin-bottom: 20px;
+            font-size: 1.1em;
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .total-costs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+
+        .total-item {
+            background: #0a0a0a;
+            padding: 16px;
+            border-radius: 6px;
+            border: 1px solid #222;
+        }
+
+        .total-label {
+            font-size: 0.85em;
+            margin-bottom: 6px;
+            color: #888;
+        }
+
+        .total-value {
+            font-size: 1.6em;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        .tips-section {
+            background: #1a1a0a;
+            border: 1px solid #2a2a0a;
+            border-left: 3px solid #999;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 30px;
+        }
+
+        .tips-section h3 {
+            color: #ccc;
+            margin-bottom: 15px;
+            font-size: 1em;
+            font-weight: 500;
+        }
+
+        .tip {
+            color: #aaa;
+            margin-bottom: 10px;
+            padding-left: 24px;
+            position: relative;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+
+        .tip:before {
+            content: "•";
+            position: absolute;
+            left: 8px;
+            color: #666;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #555;
+        }
+
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px 15px;
+            }
+
+            h1 {
+                font-size: 1.6em;
+            }
+
+            .appliance-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .appliance-cost {
+                margin-top: 12px;
+                text-align: left;
+            }
+
+            .btn-remove {
+                margin-left: 0;
+                margin-top: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Energy Cost Calculator</h1>
+        <p class="subtitle">Track your appliance energy costs and save money</p>
+
+        <!-- Electricity Rate Input -->
+        <div class="rate-input">
+            <label for="locationSelect">Your Location</label>
+            <select id="locationSelect">
+                <option value="">Select your country...</option>
+                <!-- Most Popular Countries -->
+                <option value="US" data-rate="0.16" data-currency="$" data-symbol="USD">United States</option>
+                <option value="IN" data-rate="0.08" data-currency="₹" data-symbol="INR">India</option>
+                <option value="CN" data-rate="0.08" data-currency="¥" data-symbol="CNY">China</option>
+                <option value="NG" data-rate="68.00" data-currency="₦" data-symbol="NGN">Nigeria</option>
+                <option value="GB" data-rate="0.28" data-currency="£" data-symbol="GBP">United Kingdom</option>
+                <option value="BR" data-rate="0.12" data-currency="R$" data-symbol="BRL">Brazil</option>
+                <option value="PK" data-rate="0.10" data-currency="₨" data-symbol="PKR">Pakistan</option>
+                <option value="BD" data-rate="0.07" data-currency="৳" data-symbol="BDT">Bangladesh</option>
+                <option value="ID" data-rate="0.09" data-currency="Rp" data-symbol="IDR">Indonesia</option>
+                <option value="MX" data-rate="0.09" data-currency="$" data-symbol="MXN">Mexico</option>
+                <option value="JP" data-rate="0.27" data-currency="¥" data-symbol="JPY">Japan</option>
+                <option value="DE" data-rate="0.38" data-currency="€" data-symbol="EUR">Germany</option>
+                <option value="FR" data-rate="0.22" data-currency="€" data-symbol="EUR">France</option>
+                <option value="TH" data-rate="0.11" data-currency="฿" data-symbol="THB">Thailand</option>
+                <option value="ZA" data-rate="0.12" data-currency="R" data-symbol="ZAR">South Africa</option>
+                <option value="KE" data-rate="0.22" data-currency="KSh" data-symbol="KES">Kenya</option>
+                <option value="ES" data-rate="0.29" data-currency="€" data-symbol="EUR">Spain</option>
+                <option value="IT" data-rate="0.31" data-currency="€" data-symbol="EUR">Italy</option>
+                <option value="PH" data-rate="0.19" data-currency="₱" data-symbol="PHP">Philippines</option>
+                <option value="EG" data-rate="0.08" data-currency="E£" data-symbol="EGP">Egypt</option>
+                <!-- Alphabetical (Rest) -->
+                <option value="AE" data-rate="0.08" data-currency="د.إ" data-symbol="AED">UAE</option>
+                <option value="AR" data-rate="0.03" data-currency="$" data-symbol="ARS">Argentina</option>
+                <option value="AU" data-rate="0.25" data-currency="$" data-symbol="AUD">Australia</option>
+                <option value="BE" data-rate="0.32" data-currency="€" data-symbol="EUR">Belgium</option>
+                <option value="CA" data-rate="0.13" data-currency="$" data-symbol="CAD">Canada</option>
+                <option value="GH" data-rate="0.18" data-currency="₵" data-symbol="GHS">Ghana</option>
+                <option value="MY" data-rate="0.08" data-currency="RM" data-symbol="MYR">Malaysia</option>
+                <option value="NL" data-rate="0.27" data-currency="€" data-symbol="EUR">Netherlands</option>
+                <option value="SA" data-rate="0.05" data-currency="﷼" data-symbol="SAR">Saudi Arabia</option>
+                <option value="SG" data-rate="0.23" data-currency="$" data-symbol="SGD">Singapore</option>
+                <option value="CUSTOM" data-rate="0.12" data-currency="$" data-symbol="USD">Custom / Other</option>
+            </select>
+            
+            <div style="margin-top: 20px;">
+                <label for="electricityRate">Electricity Rate (<span id="currencySymbol">$</span>/kWh)</label>
+                <input type="text" id="electricityRate" pattern="[0-9]*\.?[0-9]*" inputmode="decimal" value="0.12" placeholder="e.g., 0.12">
+            </div>
+            
+            <small style="color: #666; display: block; margin-top: 8px;">
+                Average rates as of March 2025. Your actual rate may vary. 
+                <a href="https://www.globalpetrolprices.com/electricity_prices/" target="_blank" style="color: #888; text-decoration: underline;">Check your bill</a> for exact pricing.
+            </small>
+        </div>
+
+        <!-- Add Appliance Form -->
+        <div class="appliance-form">
+            <h2 style="margin-bottom: 20px; color: #333;">Add an Appliance</h2>
+            
+            <div class="form-group">
+                <label for="applianceType">Appliance Type</label>
+                <select id="applianceType">
+                    <option value="">Select or type custom...</option>
+                    <option value="Refrigerator" data-watts="150">Refrigerator (150W)</option>
+                    <option value="Air Conditioner" data-watts="3500">Air Conditioner (3500W)</option>
+                    <option value="LED Light Bulb" data-watts="10">LED Light Bulb (10W)</option>
+                    <option value="Laptop" data-watts="50">Laptop (50W)</option>
+                    <option value="Desktop Computer" data-watts="200">Desktop Computer (200W)</option>
+                    <option value="TV (LED)" data-watts="80">TV (LED) (80W)</option>
+                    <option value="Microwave" data-watts="1000">Microwave (1000W)</option>
+                    <option value="Washing Machine" data-watts="500">Washing Machine (500W)</option>
+                    <option value="Electric Heater" data-watts="1500">Electric Heater (1500W)</option>
+                    <option value="Hair Dryer" data-watts="1800">Hair Dryer (1800W)</option>
+                    <option value="Ceiling Fan" data-watts="75">Ceiling Fan (75W)</option>
+                    <option value="Custom">Custom Appliance</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="customName" id="customNameLabel" style="display: none;">Custom Appliance Name</label>
+                <input type="text" id="customName" placeholder="e.g., Gaming Console" style="display: none;">
+            </div>
+
+            <div class="form-group">
+                <label for="wattage">Power Consumption (Watts)</label>
+                <input type="text" id="wattage" pattern="[0-9]*\.?[0-9]*" inputmode="decimal" placeholder="e.g., 100" value="150">
+            </div>
+
+            <div class="form-group">
+                <label for="hoursPerDay">Hours Used Per Day</label>
+                <div class="slider-container">
+                    <div class="slider-value"><span id="hoursValue">6</span> hours/day</div>
+                    <input type="range" id="hoursPerDay" min="0" max="24" step="0.5" value="6">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="quantity">Quantity</label>
+                <div class="slider-container">
+                    <div class="slider-value"><span id="quantityValue">1</span> unit(s)</div>
+                    <input type="range" id="quantity" min="1" max="20" step="1" value="1">
+                </div>
+            </div>
+
+            <button class="btn btn-primary" onclick="addAppliance()">+ Add Appliance</button>
+        </div>
+
+        <!-- Appliances List -->
+        <div class="appliances-list" id="appliancesList">
+            <div class="empty-state">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                <p>No appliances added yet. Start by adding your first appliance above!</p>
+            </div>
+        </div>
+
+        <!-- Total Costs Section -->
+        <div class="total-section" id="totalSection" style="display: none;">
+            <h2>Total Energy Costs</h2>
+            <div class="total-costs">
+                <div class="total-item">
+                    <div class="total-label">Daily</div>
+                    <div class="total-value"><span id="totalCurrencyDaily"></span><span id="totalDaily">0.00</span></div>
+                </div>
+                <div class="total-item">
+                    <div class="total-label">Monthly</div>
+                    <div class="total-value"><span id="totalCurrencyMonthly"></span><span id="totalMonthly">0.00</span></div>
+                </div>
+                <div class="total-item">
+                    <div class="total-label">Yearly</div>
+                    <div class="total-value"><span id="totalCurrencyYearly"></span><span id="totalYearly">0.00</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tips Section -->
+        <div class="tips-section" id="tipsSection" style="display: none;">
+            <h3>💰 Money-Saving Tips</h3>
+            <div id="tipsContent"></div>
+        </div>
+    </div>
+
+    <script>
+        let appliances = [];
+        let currentCurrency = '$';
+
+        // Handle location selection
+        document.getElementById('locationSelect').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const rate = selectedOption.getAttribute('data-rate');
+            const currency = selectedOption.getAttribute('data-currency');
+            
+            // Always update when a location is selected (even if user manually edited before)
+            if (this.value && rate && currency) {
+                document.getElementById('electricityRate').value = rate;
+                document.getElementById('currencySymbol').textContent = currency;
+                currentCurrency = currency;
+                
+                // Recalculate all appliances with new rate
+                if (appliances.length > 0) {
+                    const newRate = parseFloat(rate);
+                    appliances = appliances.map(app => ({
+                        ...app,
+                        dailyCost: calculateCost(app.wattage, app.hoursPerDay, newRate, 1) * app.quantity,
+                        monthlyCost: calculateCost(app.wattage, app.hoursPerDay, newRate, 30) * app.quantity,
+                        yearlyCost: calculateCost(app.wattage, app.hoursPerDay, newRate, 365) * app.quantity
+                    }));
+                    renderAppliances();
+                    updateTotals();
+                }
+            }
+        });
+
+        // Update hours slider value display
+        document.getElementById('hoursPerDay').addEventListener('input', function() {
+            document.getElementById('hoursValue').textContent = this.value;
+        });
+
+        // Update quantity slider value display
+        document.getElementById('quantity').addEventListener('input', function() {
+            document.getElementById('quantityValue').textContent = this.value;
+        });
+
+        // Handle appliance type selection
+        document.getElementById('applianceType').addEventListener('change', function() {
+            const selectedOption = this.options[this.selectedIndex];
+            const watts = selectedOption.getAttribute('data-watts');
+            const customNameInput = document.getElementById('customName');
+            const customNameLabel = document.getElementById('customNameLabel');
+            
+            if (this.value === 'Custom') {
+                customNameInput.style.display = 'block';
+                customNameLabel.style.display = 'block';
+                document.getElementById('wattage').value = '';
+            } else {
+                customNameInput.style.display = 'none';
+                customNameLabel.style.display = 'none';
+                if (watts) {
+                    document.getElementById('wattage').value = watts;
+                }
+            }
+        });
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function addAppliance() {
+            const typeSelect = document.getElementById('applianceType');
+            const customName = document.getElementById('customName').value;
+            const wattage = parseFloat(document.getElementById('wattage').value);
+            const hours = parseFloat(document.getElementById('hoursPerDay').value);
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const rate = parseFloat(document.getElementById('electricityRate').value);
+
+            let applianceName = typeSelect.value === 'Custom' ? customName : typeSelect.value;
+
+            if (!applianceName || !wattage || !hours) {
+                alert('Please fill in all fields!');
+                return;
+            }
+
+            if (!rate || rate <= 0) {
+                alert('Please enter a valid electricity rate!');
+                return;
+            }
+
+            const appliance = {
+                id: Date.now(),
+                name: applianceName,
+                wattage: wattage,
+                hoursPerDay: hours,
+                quantity: quantity,
+                dailyCost: calculateCost(wattage, hours, rate, 1) * quantity,
+                monthlyCost: calculateCost(wattage, hours, rate, 30) * quantity,
+                yearlyCost: calculateCost(wattage, hours, rate, 365) * quantity
+            };
+
+            appliances.push(appliance);
+            renderAppliances();
+            updateTotals();
+            generateTips();
+
+            // Reset form
+            typeSelect.selectedIndex = 0;
+            document.getElementById('customName').value = '';
+            document.getElementById('wattage').value = '';
+            document.getElementById('hoursPerDay').value = 6;
+            document.getElementById('hoursValue').textContent = 6;
+            document.getElementById('quantity').value = 1;
+            document.getElementById('quantityValue').textContent = 1;
+            document.getElementById('customName').style.display = 'none';
+            document.getElementById('customNameLabel').style.display = 'none';
+        }
+
+        function calculateCost(watts, hoursPerDay, ratePerKwh, days) {
+            const kwh = (watts / 1000) * hoursPerDay * days;
+            return (kwh * ratePerKwh).toFixed(2);
+        }
+
+        function removeAppliance(id) {
+            appliances = appliances.filter(a => a.id !== id);
+            renderAppliances();
+            updateTotals();
+            generateTips();
+        }
+
+        function renderAppliances() {
+            const list = document.getElementById('appliancesList');
+            
+            if (appliances.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                        </svg>
+                        <p>No appliances added yet. Start by adding your first appliance above!</p>
+                    </div>
+                `;
+                return;
+            }
+
+            list.innerHTML = appliances.map(app => `
+                <div class="appliance-item">
+                    <div class="appliance-info">
+                        <h3>${app.name}${app.quantity > 1 ? ` × ${app.quantity}` : ''}</h3>
+                        <div class="appliance-details">
+                            ${app.wattage}W • ${app.hoursPerDay} hours/day${app.quantity > 1 ? ` • ${app.quantity} units` : ''}
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center;">
+                        <div class="appliance-cost">
+                            <div class="cost-value">${currentCurrency}${formatNumber(app.monthlyCost)}</div>
+                            <div class="cost-period">per month</div>
+                        </div>
+                        <button class="btn-remove" onclick="removeAppliance(${app.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function updateTotals() {
+            const totalSection = document.getElementById('totalSection');
+            
+            if (appliances.length === 0) {
+                totalSection.style.display = 'none';
+                return;
+            }
+
+            totalSection.style.display = 'block';
+
+            const totals = appliances.reduce((acc, app) => ({
+                daily: acc.daily + parseFloat(app.dailyCost),
+                monthly: acc.monthly + parseFloat(app.monthlyCost),
+                yearly: acc.yearly + parseFloat(app.yearlyCost)
+            }), { daily: 0, monthly: 0, yearly: 0 });
+
+            document.getElementById('totalDaily').textContent = formatNumber(totals.daily.toFixed(2));
+            document.getElementById('totalMonthly').textContent = formatNumber(totals.monthly.toFixed(2));
+            document.getElementById('totalYearly').textContent = formatNumber(totals.yearly.toFixed(2));
+            
+            // Update currency symbols for all three totals
+            document.getElementById('totalCurrencyDaily').textContent = currentCurrency;
+            document.getElementById('totalCurrencyMonthly').textContent = currentCurrency;
+            document.getElementById('totalCurrencyYearly').textContent = currentCurrency;
+        }
+
+        function generateTips() {
+            const tipsSection = document.getElementById('tipsSection');
+            const tipsContent = document.getElementById('tipsContent');
+
+            if (appliances.length === 0) {
+                tipsSection.style.display = 'none';
+                return;
+            }
+
+            tipsSection.style.display = 'block';
+
+            const tips = [];
+
+            // Check for high-consumption appliances
+            const highConsumption = appliances.filter(a => a.wattage > 1000);
+            if (highConsumption.length > 0) {
+                tips.push(`Your ${highConsumption[0].name} uses a lot of power. Consider using it during off-peak hours if your utility offers time-of-use rates.`);
+            }
+
+            // Check for AC usage
+            const ac = appliances.find(a => a.name.toLowerCase().includes('air conditioner'));
+            if (ac && ac.hoursPerDay > 8) {
+                tips.push('Your AC runs a lot! Try raising the temperature by 2°F - you could save 10-15% on cooling costs.');
+            }
+
+            // Check for old lights
+            const lights = appliances.filter(a => a.name.toLowerCase().includes('light') || a.name.toLowerCase().includes('bulb'));
+            const oldLights = lights.filter(l => l.wattage > 40);
+            if (oldLights.length > 0) {
+                tips.push('Switch to LED bulbs! They use 75% less energy and last 25x longer than incandescent bulbs.');
+            }
+
+            // Generic tips
+            tips.push('Unplug devices when not in use - phantom power can add 5-10% to your bill.');
+            tips.push('Use a smart power strip to automatically cut power to devices in standby mode.');
+
+            tipsContent.innerHTML = tips.map(tip => `<div class="tip">${tip}</div>`).join('');
+        }
+
+        // Update calculations when rate changes
+        document.getElementById('electricityRate').addEventListener('input', function() {
+            const rate = parseFloat(this.value);
+            if (rate && rate > 0 && appliances.length > 0) {
+                appliances = appliances.map(app => ({
+                    ...app,
+                    dailyCost: calculateCost(app.wattage, app.hoursPerDay, rate, 1) * app.quantity,
+                    monthlyCost: calculateCost(app.wattage, app.hoursPerDay, rate, 30) * app.quantity,
+                    yearlyCost: calculateCost(app.wattage, app.hoursPerDay, rate, 365) * app.quantity
+                }));
+                renderAppliances();
+                updateTotals();
+            }
+        });
+    </script>
+</body>
+</html>
