@@ -103,7 +103,7 @@ Questions? Suggestions? Reach out!
 
 - GitHub Issues: [Open an issue](https://github.com/horlladjosh/my-electric-bill/issues)
 - Email: contact@horlladjosh.com
-- Twitter: twitter.com@horllad_josh
+- Twitter: [@horllad_josh](https://twitter.com/horllad_josh)
 
 ---
 
